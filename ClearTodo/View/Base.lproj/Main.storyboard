@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--ClearTodo-->
+        <!--Clear Todo-->
         <scene sceneID="ceH-So-Byc">
             <objects>
                 <tableViewController id="Btd-U1-DJ3" customClass="TodosViewController" customModule="ClearTodo" customModuleProvider="target" sceneMemberID="viewController">
@@ -30,7 +30,7 @@
                             <outlet property="delegate" destination="Btd-U1-DJ3" id="clt-qg-OPx"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="ClearTodo" id="cY2-fh-UZ4">
+                    <navigationItem key="navigationItem" title="Clear Todo" id="cY2-fh-UZ4">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="80Y-EN-cPu">
                             <connections>
                                 <action selector="addButtonPressed:" destination="Btd-U1-DJ3" id="Ynj-Vr-1h6"/>
