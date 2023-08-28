@@ -8,7 +8,12 @@
 import UIKit
 
 class TodosViewController: UITableViewController {
-    var todos = TodoStorage.shared.loadTodos()
+    let todoStorage = TodoStorage.customPlist
+    var todos = [Todo]()
+    
+    override func viewDidLoad() {
+        todos = todoStorage.loadTodos()
+    }
     
     //MARK: - UITableViewDataSource
     
@@ -33,7 +38,7 @@ class TodosViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         todos[indexPath.row].done = !todos[indexPath.row].done
-        TodoStorage.shared.saveTodos(todos)
+        todoStorage.saveTodos(todos)
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -58,7 +63,7 @@ class TodosViewController: UITableViewController {
                 let todo = Todo(title: text)
                 
                 self.todos.append(todo)
-                TodoStorage.shared.saveTodos(self.todos)
+                self.todoStorage.saveTodos(self.todos)
                 self.tableView.reloadData()
             }
         }
@@ -67,6 +72,5 @@ class TodosViewController: UITableViewController {
         alert.addAction(action)
         present(alert, animated: true)
     }
-    
 }
 
