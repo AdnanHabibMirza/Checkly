@@ -76,6 +76,8 @@ class TodosViewController: UITableViewController {
         present(alert, animated: true)
     }
     
+    //MARK: - CoreData
+    
     func saveTodos(){
         do {
             try context.save()
@@ -84,13 +86,38 @@ class TodosViewController: UITableViewController {
         }
     }
     
-    func loadTodos() -> [Todo] {
-        let request = Todo.fetchRequest()
+    func loadTodos(with request: NSFetchRequest<Todo> = Todo.fetchRequest()) -> [Todo] {
         do {
             return try context.fetch(request)
         } catch {
             fatalError(error.localizedDescription)
         }
     }
+    
+    func searchTodos(with query:String) -> [Todo] {
+        let request = Todo.fetchRequest()
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", query)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        return loadTodos(with: request)
+    }
 }
 
+//MARK: - UISearchBarDelegate
+
+extension TodosViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let query = searchBar.text, !query.isEmpty else { return }
+        todos = searchTodos(with: query)
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            todos = loadTodos()
+            tableView.reloadData()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+}
