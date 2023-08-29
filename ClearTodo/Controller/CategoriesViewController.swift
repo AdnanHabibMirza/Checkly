@@ -1,44 +1,38 @@
 //
-//  ViewController.swift
+//  CategoriesViewController.swift
 //  ClearTodo
 //
-//  Created by Adnan Habib on 26/08/2023.
+//  Created by Adnan Habib on 30/08/2023.
 //
 
 import UIKit
 import CoreData
 
-class TodosViewController: UITableViewController {
+class CategoriesViewController: UITableViewController {
     
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var todos = [Todo]()
-    var category: Category? {
-        didSet {
-            todos = loadTodos()
-            tableView.reloadData()
-        }
-    }
+    var categories = [Category]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = category?.title
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        categories = loadCategories()
+        tableView.reloadData()
     }
     
     //MARK: - UITableViewDataSource
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todos.count
+        return categories.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
-        let todo = todos[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        let category = categories[indexPath.row]
         
         var contentConfiguration = cell.defaultContentConfiguration()
-        contentConfiguration.text = todo.title
+        contentConfiguration.text = category.title
         cell.contentConfiguration = contentConfiguration
-        
-        cell.accessoryType = todo.done ? .checkmark : .none
         
         return cell
     }
@@ -46,21 +40,25 @@ class TodosViewController: UITableViewController {
     //MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        todos[indexPath.row].done = !todos[indexPath.row].done
-        saveTodos()
-        tableView.reloadData()
+        performSegue(withIdentifier: "goToTodos", sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destination = segue.destination as? TodosViewController else {return}
+        guard let indexPath = tableView.indexPathForSelectedRow else {return}
+        destination.category = categories[indexPath.row]
     }
     
     //MARK: - Add New Items
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var uiTextField = UITextField()
-        let alert = UIAlertController(title: "Add Todo", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add Category", message: "", preferredStyle: .alert)
         
         alert.addTextField { alertTextField in
             uiTextField = alertTextField
-            alertTextField.placeholder = "Type Todo Title"
+            alertTextField.placeholder = "Type Category Title"
             
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: alertTextField, queue: .main) { _ in
                 alert.actions.first?.isEnabled = !(alertTextField.text?.isEmpty ?? true)
@@ -69,11 +67,10 @@ class TodosViewController: UITableViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { action in
             if let text = uiTextField.text, !text.isEmpty {
-                let todo = Todo(context: self.context)
-                todo.title = text
-                todo.category = self.category
-                self.saveTodos()
-                self.todos.append(todo)
+                let category = Category(context: self.context)
+                category.title = text
+                self.saveCategories()
+                self.categories.append(category)
                 self.tableView.reloadData()
             }
         }
@@ -91,7 +88,7 @@ class TodosViewController: UITableViewController {
     
     //MARK: - CoreData
     
-    func saveTodos(){
+    func saveCategories(){
         do {
             try context.save()
         } catch {
@@ -99,15 +96,7 @@ class TodosViewController: UITableViewController {
         }
     }
     
-    func loadTodos(with request: NSFetchRequest<Todo> = Todo.fetchRequest(), with predicate: NSPredicate? = nil) -> [Todo] {
-        let categoryPredicate = NSPredicate(format: "category.title MATCHES %@", category!.title!)
-        
-        if let additionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [additionalPredicate, categoryPredicate])
-        } else {
-            request.predicate = categoryPredicate
-        }
-        
+    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) -> [Category] {
         do {
             return try context.fetch(request)
         } catch {
@@ -115,26 +104,26 @@ class TodosViewController: UITableViewController {
         }
     }
     
-    func searchTodos(with query:String) -> [Todo] {
-        let request = Todo.fetchRequest()
-        let searchPredicate = NSPredicate(format: "title CONTAINS[cd] %@", query)
+    func searchCategories(with query:String) -> [Category] {
+        let request = Category.fetchRequest()
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", query)
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        return loadTodos(with: request, with: searchPredicate)
+        return loadCategories(with: request)
     }
 }
 
 //MARK: - UISearchBarDelegate
 
-extension TodosViewController: UISearchBarDelegate {
+extension CategoriesViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let query = searchBar.text, !query.isEmpty else { return }
-        todos = searchTodos(with: query)
+        categories = searchCategories(with: query)
         tableView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
-            todos = loadTodos()
+            categories = loadCategories()
             tableView.reloadData()
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
