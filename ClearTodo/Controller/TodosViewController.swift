@@ -6,13 +6,16 @@
 //
 
 import UIKit
+import CoreData
 
 class TodosViewController: UITableViewController {
-    let todoStorage = TodoStorage.customPlist
+    var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var todos = [Todo]()
     
     override func viewDidLoad() {
-        todos = todoStorage.loadTodos()
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        todos = loadTodos()
+        tableView.reloadData()
     }
     
     //MARK: - UITableViewDataSource
@@ -38,7 +41,7 @@ class TodosViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         todos[indexPath.row].done = !todos[indexPath.row].done
-        todoStorage.saveTodos(todos)
+        saveTodos()
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -60,10 +63,10 @@ class TodosViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add", style: .default) { action in
             if let text = uiTextField.text, !text.isEmpty {
-                let todo = Todo(title: text)
-                
+                let todo = Todo(context: self.context)
+                todo.title = text
+                self.saveTodos()
                 self.todos.append(todo)
-                self.todoStorage.saveTodos(self.todos)
                 self.tableView.reloadData()
             }
         }
@@ -71,6 +74,23 @@ class TodosViewController: UITableViewController {
         action.isEnabled = false
         alert.addAction(action)
         present(alert, animated: true)
+    }
+    
+    func saveTodos(){
+        do {
+            try context.save()
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    func loadTodos() -> [Todo] {
+        let request = Todo.fetchRequest()
+        do {
+            return try context.fetch(request)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
     }
 }
 
