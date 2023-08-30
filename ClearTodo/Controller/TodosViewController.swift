@@ -6,16 +6,15 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class TodosViewController: UITableViewController {
     
-    var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var todos = [Todo]()
-    var category: Category? {
+    let realm = try! Realm()
+    var todos: Results<Todo>!
+    var category: Category! {
         didSet {
-            todos = loadTodos()
-            tableView.reloadData()
+            loadTodos()
         }
     }
     
@@ -46,10 +45,19 @@ class TodosViewController: UITableViewController {
     //MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        todos[indexPath.row].done = !todos[indexPath.row].done
-        saveTodos()
-        tableView.reloadData()
-        tableView.deselectRow(at: indexPath, animated: true)
+        realm.writeAsync {
+            let todo = self.todos[indexPath.row]
+            todo.done = !todo.done
+        } onComplete: { e in
+            if let error = e {
+                fatalError(error.localizedDescription)
+            } else {
+                DispatchQueue.main.async {
+                    tableView.reloadData()
+                    tableView.deselectRow(at: indexPath, animated: true)
+                }
+            }
+        }
     }
     
     //MARK: - Add New Items
@@ -69,12 +77,9 @@ class TodosViewController: UITableViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { action in
             if let text = uiTextField.text, !text.isEmpty {
-                let todo = Todo(context: self.context)
+                let todo = Todo()
                 todo.title = text
-                todo.category = self.category
-                self.saveTodos()
-                self.todos.append(todo)
-                self.tableView.reloadData()
+                self.addTodo(todo)
             }
         }
         
@@ -89,37 +94,32 @@ class TodosViewController: UITableViewController {
         present(alert, animated: true)
     }
     
-    //MARK: - CoreData
+    //MARK: - Realm
     
-    func saveTodos(){
-        do {
-            try context.save()
-        } catch {
-            fatalError(error.localizedDescription)
+    func addTodo(_ todo:Todo){
+        realm.writeAsync {
+            self.category!.todos.append(todo)
+        } onComplete: { e in
+            if let error = e {
+                fatalError(error.localizedDescription)
+            } else {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
         }
     }
     
-    func loadTodos(with request: NSFetchRequest<Todo> = Todo.fetchRequest(), with predicate: NSPredicate? = nil) -> [Todo] {
-        let categoryPredicate = NSPredicate(format: "category.title MATCHES %@", category!.title!)
-        
-        if let additionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [additionalPredicate, categoryPredicate])
-        } else {
-            request.predicate = categoryPredicate
+    func loadTodos(with query:String = ""){
+        if(query.isEmpty) {
+            todos = category.todos.sorted(byKeyPath: "created", ascending: false)
+        }else{
+            todos = category.todos.sorted(byKeyPath: "created", ascending: false).filter("title CONTAINS[cd] %@", query)
+            
         }
-        
-        do {
-            return try context.fetch(request)
-        } catch {
-            fatalError(error.localizedDescription)
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
-    }
-    
-    func searchTodos(with query:String) -> [Todo] {
-        let request = Todo.fetchRequest()
-        let searchPredicate = NSPredicate(format: "title CONTAINS[cd] %@", query)
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        return loadTodos(with: request, with: searchPredicate)
     }
 }
 
@@ -127,15 +127,15 @@ class TodosViewController: UITableViewController {
 
 extension TodosViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let query = searchBar.text, !query.isEmpty else { return }
-        todos = searchTodos(with: query)
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            searchBar.resignFirstResponder()
+        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
-            todos = loadTodos()
-            tableView.reloadData()
+        guard let query = searchBar.text else { return }
+        loadTodos(with: query)
+        if(query.isEmpty){
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }

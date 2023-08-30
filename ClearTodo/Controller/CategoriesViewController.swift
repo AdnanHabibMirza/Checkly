@@ -6,18 +6,16 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoriesViewController: UITableViewController {
     
-    var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var categories = [Category]()
+    let realm = try! Realm()
+    var categories: Results<Category>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        categories = loadCategories()
-        tableView.reloadData()
+        loadCategories()
     }
     
     //MARK: - UITableViewDataSource
@@ -67,11 +65,9 @@ class CategoriesViewController: UITableViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { action in
             if let text = uiTextField.text, !text.isEmpty {
-                let category = Category(context: self.context)
+                let category = Category()
                 category.title = text
-                self.saveCategories()
-                self.categories.append(category)
-                self.tableView.reloadData()
+                self.addCategory(category)
             }
         }
         
@@ -86,45 +82,48 @@ class CategoriesViewController: UITableViewController {
         present(alert, animated: true)
     }
     
-    //MARK: - CoreData
+    //MARK: - Realm
     
-    func saveCategories(){
-        do {
-            try context.save()
-        } catch {
-            fatalError(error.localizedDescription)
+    func addCategory(_ category: Category){
+        realm.writeAsync {
+            self.realm.add(category)
+        } onComplete: { e in
+            if let error = e {
+                fatalError(error.localizedDescription)
+            } else {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
         }
     }
     
-    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) -> [Category] {
-        do {
-            return try context.fetch(request)
-        } catch {
-            fatalError(error.localizedDescription)
+    func loadCategories(with query:String = ""){
+        if(query.isEmpty) {
+            categories = realm.objects(Category.self).sorted(byKeyPath: "title")
+        } else {
+            categories = realm.objects(Category.self).sorted(byKeyPath: "title").filter("title CONTAINS[cd] %@", query)
+        }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
     }
     
-    func searchCategories(with query:String) -> [Category] {
-        let request = Category.fetchRequest()
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", query)
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        return loadCategories(with: request)
-    }
 }
 
 //MARK: - UISearchBarDelegate
 
 extension CategoriesViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let query = searchBar.text, !query.isEmpty else { return }
-        categories = searchCategories(with: query)
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            searchBar.resignFirstResponder()
+        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
-            categories = loadCategories()
-            tableView.reloadData()
+        guard let query = searchBar.text else { return }
+        loadCategories(with: query)
+        if(query.isEmpty){
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
