@@ -10,7 +10,7 @@
         <!--Todos View Controller-->
         <scene sceneID="ceH-So-Byc">
             <objects>
-                <tableViewController id="Btd-U1-DJ3" customClass="TodosViewController" customModule="ClearTodo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Btd-U1-DJ3" customClass="TodosViewController" customModule="Checkly" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Rbp-9R-GbP">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -50,10 +50,10 @@
             </objects>
             <point key="canvasLocation" x="2182" y="31"/>
         </scene>
-        <!--Clear Todo-->
+        <!--Categories View Controller-->
         <scene sceneID="3u3-PD-Wzl">
             <objects>
-                <tableViewController id="5Cn-MI-NW3" customClass="CategoriesViewController" customModule="ClearTodo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="5Cn-MI-NW3" userLabel="Categories View Controller" customClass="CategoriesViewController" customModule="Checkly" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="HJw-eX-EBv">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -81,7 +81,7 @@
                             <outlet property="delegate" destination="5Cn-MI-NW3" id="9SH-tf-iAE"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Clear Todo" id="4wi-hE-kax">
+                    <navigationItem key="navigationItem" title="Checkly" id="4wi-hE-kax">
                         <barButtonItem key="backBarButtonItem" title="Back" id="xEp-YB-1Tt"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="EbL-ui-5hY">
                             <connections>

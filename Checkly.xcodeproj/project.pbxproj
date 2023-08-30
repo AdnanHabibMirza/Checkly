@@ -22,7 +22,7 @@
 
 /* Begin PBXFileReference section */
 		846D909B2A9E9A0300605D40 /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
-		84B0902D2A9A7EB5005326FB /* ClearTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		84B0902D2A9A7EB5005326FB /* Checkly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checkly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84B090302A9A7EB5005326FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84B090322A9A7EB5005326FB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		84B090342A9A7EB5005326FB /* TodosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosViewController.swift; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 		84B090242A9A7EB5005326FB = {
 			isa = PBXGroup;
 			children = (
-				84B0902F2A9A7EB5005326FB /* ClearTodo */,
+				84B0902F2A9A7EB5005326FB /* Checkly */,
 				84B0902E2A9A7EB5005326FB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -84,12 +84,12 @@
 		84B0902E2A9A7EB5005326FB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				84B0902D2A9A7EB5005326FB /* ClearTodo.app */,
+				84B0902D2A9A7EB5005326FB /* Checkly.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		84B0902F2A9A7EB5005326FB /* ClearTodo */ = {
+		84B0902F2A9A7EB5005326FB /* Checkly */ = {
 			isa = PBXGroup;
 			children = (
 				84B090302A9A7EB5005326FB /* AppDelegate.swift */,
@@ -101,15 +101,15 @@
 				84B0903B2A9A7EB5005326FB /* LaunchScreen.storyboard */,
 				84B0903E2A9A7EB5005326FB /* Info.plist */,
 			);
-			path = ClearTodo;
+			path = Checkly;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		84B0902C2A9A7EB5005326FB /* ClearTodo */ = {
+		84B0902C2A9A7EB5005326FB /* Checkly */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 84B090412A9A7EB5005326FB /* Build configuration list for PBXNativeTarget "ClearTodo" */;
+			buildConfigurationList = 84B090412A9A7EB5005326FB /* Build configuration list for PBXNativeTarget "Checkly" */;
 			buildPhases = (
 				84B090292A9A7EB5005326FB /* Sources */,
 				84B0902A2A9A7EB5005326FB /* Frameworks */,
@@ -119,13 +119,13 @@
 			);
 			dependencies = (
 			);
-			name = ClearTodo;
+			name = Checkly;
 			packageProductDependencies = (
 				8428532D2A9EF7F200E584E4 /* Realm */,
 				8428532F2A9EF7F200E584E4 /* RealmSwift */,
 			);
 			productName = ClearTodo;
-			productReference = 84B0902D2A9A7EB5005326FB /* ClearTodo.app */;
+			productReference = 84B0902D2A9A7EB5005326FB /* Checkly.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -143,7 +143,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 84B090282A9A7EB5005326FB /* Build configuration list for PBXProject "ClearTodo" */;
+			buildConfigurationList = 84B090282A9A7EB5005326FB /* Build configuration list for PBXProject "Checkly" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -159,7 +159,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				84B0902C2A9A7EB5005326FB /* ClearTodo */,
+				84B0902C2A9A7EB5005326FB /* Checkly */,
 			);
 		};
 /* End PBXProject section */
@@ -336,8 +336,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = BGM74D9Z9Y;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ClearTodo/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Clear Todo";
+				INFOPLIST_FILE = Checkly/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Checkly;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -348,7 +348,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.adnanhabibmirza.ClearTodo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adnanhabibmirza.Checkly;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -365,8 +365,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = BGM74D9Z9Y;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ClearTodo/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Clear Todo";
+				INFOPLIST_FILE = Checkly/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Checkly;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -377,7 +377,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.adnanhabibmirza.ClearTodo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adnanhabibmirza.Checkly;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -388,7 +388,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		84B090282A9A7EB5005326FB /* Build configuration list for PBXProject "ClearTodo" */ = {
+		84B090282A9A7EB5005326FB /* Build configuration list for PBXProject "Checkly" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				84B0903F2A9A7EB5005326FB /* Debug */,
@@ -397,7 +397,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		84B090412A9A7EB5005326FB /* Build configuration list for PBXNativeTarget "ClearTodo" */ = {
+		84B090412A9A7EB5005326FB /* Build configuration list for PBXNativeTarget "Checkly" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				84B090422A9A7EB5005326FB /* Debug */,
