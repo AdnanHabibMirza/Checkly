@@ -64,13 +64,13 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		849B27792A9B7BCF00831BD9 /* Data */ = {
+		849B27792A9B7BCF00831BD9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				84FE78202A9FCB9900050F2F /* Category.swift */,
 				84FE78222A9FCBA100050F2F /* Todo.swift */,
 			);
-			path = Data;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		84B090242A9A7EB5005326FB = {
@@ -94,7 +94,7 @@
 			children = (
 				84B090302A9A7EB5005326FB /* AppDelegate.swift */,
 				84B090322A9A7EB5005326FB /* SceneDelegate.swift */,
-				849B27792A9B7BCF00831BD9 /* Data */,
+				849B27792A9B7BCF00831BD9 /* Model */,
 				849B27732A9B740500831BD9 /* View */,
 				849B27722A9B73F600831BD9 /* Controller */,
 				84B090392A9A7EB5005326FB /* Assets.xcassets */,
