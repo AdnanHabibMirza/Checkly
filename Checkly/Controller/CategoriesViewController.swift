@@ -91,7 +91,7 @@ class CategoriesViewController: UITableViewController {
             }
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { action in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { action in
             alert.dismiss(animated: true)
         }
         
