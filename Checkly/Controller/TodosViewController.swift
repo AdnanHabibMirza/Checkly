@@ -21,9 +21,10 @@ class TodosViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = category?.title
+        tableView.rowHeight = 80
     }
     
-    //MARK: - UITableViewDataSource
+    //MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todos.count
@@ -42,7 +43,25 @@ class TodosViewController: UITableViewController {
         return cell
     }
     
-    //MARK: - UITableViewDelegate
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { _, _, onComplete in
+            self.realm.writeAsync {
+                self.realm.delete(self.todos[indexPath.row])
+            } onComplete: { e in
+                if let error = e {
+                    fatalError(error.localizedDescription)
+                } else {
+                    DispatchQueue.main.async {
+                        tableView.reloadData()
+                    }
+                }
+            }
+            onComplete(true)
+        }
+        deleteAction.image = UIImage(systemName: "trash")
+        deleteAction.backgroundColor = .systemRed
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         realm.writeAsync {

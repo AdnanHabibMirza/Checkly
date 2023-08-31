@@ -15,10 +15,11 @@ class CategoriesViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.rowHeight = 80
         loadCategories()
     }
     
-    //MARK: - UITableViewDataSource
+    //MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
@@ -35,7 +36,25 @@ class CategoriesViewController: UITableViewController {
         return cell
     }
     
-    //MARK: - UITableViewDelegate
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { _, _, onComplete in
+            self.realm.writeAsync {
+                self.realm.delete(self.categories[indexPath.row])
+            } onComplete: { e in
+                if let error = e {
+                    fatalError(error.localizedDescription)
+                } else {
+                    DispatchQueue.main.async {
+                        tableView.reloadData()
+                    }
+                }
+            }
+            onComplete(true)
+        }
+        deleteAction.image = UIImage(systemName: "trash")
+        deleteAction.backgroundColor = .systemRed
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToTodos", sender: self)
