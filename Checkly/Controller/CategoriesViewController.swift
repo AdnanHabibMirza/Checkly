@@ -76,6 +76,7 @@ class CategoriesViewController: UITableViewController {
         alert.addTextField { alertTextField in
             uiTextField = alertTextField
             alertTextField.placeholder = "Type Category Title"
+            alertTextField.autocapitalizationType = .sentences
             
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: alertTextField, queue: .main) { _ in
                 alert.actions.first?.isEnabled = !(alertTextField.text?.isEmpty ?? true)
