@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appearance.configureWithDefaultBackground()
         appearance.backgroundColor = UIColor.systemBlue
         appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
